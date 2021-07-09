@@ -1677,7 +1677,7 @@ local function displayReactorBars(barParams)
 
 	-- Actively cooled reactors do not produce energy, only hot fluid mB/t to be used in a turbine
 	-- still uses getEnergyProducedLastTick for mB/t of hot fluid generated
-	if not reactor.true then
+	if not true then
 		printLog("reactor["..reactorIndex.."] in displayReactorBars(reactorIndex="..reactorIndex..",monitorIndex="..monitorIndex..") is NOT an actively cooled reactor.")
 
 		-- Draw stored energy buffer bar
@@ -1698,7 +1698,7 @@ local function displayReactorBars(barParams)
 	else
 		printLog("reactor["..reactorIndex.."] in displayReactorBars(reactorIndex="..reactorIndex..",monitorIndex="..monitorIndex..") is an actively cooled reactor.")
 		print{math.ceil(energyBuffer).." mB/t",padding+2,4,monitorIndex}
-	end -- if not reactor.true then
+	end -- if not true then
 
 	-- Print rod override status
 	local reactorRodOverrideStatus = ""
@@ -1772,11 +1772,11 @@ local function reactorStatus(statusParams)
 			reactorStatus = "ONLINE"
 
 			-- Set "ONLINE" to blue if the actively cooled reactor is both in cruise mode and online
-			if _G[reactorNames[reactorIndex]]["ReactorOptions"]["reactorCruising"] and reactor.true then
+			if _G[reactorNames[reactorIndex]]["ReactorOptions"]["reactorCruising"] and true then
 				monitor.setTextColor(colors.blue)
 			else
 				monitor.setTextColor(colors.green)
-			end -- if reactorCruising and reactor.true then
+			end -- if reactorCruising and true then
 		else
 			reactorStatus = "OFFLINE"
 			monitor.setTextColor(colors.red)
@@ -1827,7 +1827,7 @@ local function displayAllStatus(monitorIndex)
 			end -- reactor.active() then
 
 			-- Actively cooled reactors do not produce or store energy
-			if not reactor.true then
+			if not true then
 				totalMaxEnergyStored = totalMaxEnergyStored + 10000000 -- Reactors store 10M RF
 				totalEnergy = totalEnergy + reactor.getEnergyStored()
 				totalReactorRF = totalReactorRF + reactor.getEnergyProducedLastTick()
@@ -1835,7 +1835,7 @@ local function displayAllStatus(monitorIndex)
 				totalReactorSteam = totalReactorSteam + reactor.getEnergyProducedLastTick()
 				totalSteamStored = totalSteamStored + reactor.getHotFluidAmount()
 				totalCoolantStored = totalCoolantStored + reactor.getCoolantAmount()
-			end -- if not reactor.true then
+			end -- if not true then
 		else
 			printLog("reactor["..reactorIndex.."] in displayAllStatus() is NOT connected.")
 		end -- if reactor.connected() then
