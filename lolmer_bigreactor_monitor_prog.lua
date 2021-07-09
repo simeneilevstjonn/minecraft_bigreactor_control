@@ -1410,8 +1410,8 @@ local function getReactorStoredEnergyBufferPercent(reactor)
 		printLog("getReactorStoredEnergyBufferPercent() did receive a valid Big Reactor Reactor.")
 	end
 
-	local energyBufferStorage = reactor.getEnergyStored()
-	return round(energyBufferStorage/100000, 1) -- (buffer/10000000 RF)*100%
+	local energyBufferStorage = reactor.stored()
+	return round(energyBufferStorage/reactor.capacity(), 1) -- (buffer/10000000 RF)*100%
 end -- function getReactorStoredEnergyBufferPercent(reactor)
 
 
@@ -1648,15 +1648,15 @@ local function displayReactorBars(barParams)
 
 	local padding = math.max(string.len(fuelString), string.len(tempString), string.len(energyBufferString))
 
-	local fuelPercentage = round(reactor.getFuelAmount()/reactor.getFuelAmountMax()*100,1)
+	local fuelPercentage = round(reactor.fuel()/reactor.capacity()*100,1)
 	print{fuelString,2,3,monitorIndex}
 	print{fuelPercentage.." %",padding+2,3,monitorIndex}
 
-	local reactorTemp = math.ceil(reactor.getFuelTemperature())
+	local reactorTemp = math.ceil(reactor.fuelTemperature())
 	print{tempString,2,5,monitorIndex}
 	print{reactorTemp.." C",padding+2,5,monitorIndex}
 
-	local rodPercentage = math.ceil(reactor.getControlRodLevel(0))
+	local rodPercentage = math.ceil(reactor.level(0))
 	printLog("Current Rod Percentage for reactor["..reactorIndex.."] is "..rodPercentage.."% in displayReactorBars(reactorIndex="..reactorIndex..",monitorIndex="..monitorIndex..").")
 	print{"Target °C",21,3,monitorIndex}
 	print{"<       >",21,4,monitorIndex}
@@ -1666,7 +1666,7 @@ local function displayReactorBars(barParams)
 
 
 	-- getEnergyProducedLastTick() is used for both RF/t (passively cooled) and mB/t (actively cooled)
-	local energyBuffer = reactor.getEnergyProducedLastTick()
+	local energyBuffer = reactor.producedLastTick()
 	if true then
 		printLog("reactor["..reactorIndex.."] produced "..energyBuffer.." mB last tick in displayReactorBars(reactorIndex="..reactorIndex..",monitorIndex="..monitorIndex..").")
 	else
