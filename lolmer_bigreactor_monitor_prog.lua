@@ -895,12 +895,12 @@ UI.handleTurbineMonitorClick = function(self, turbineIndex, monitorIndex)
 		return -- Invalid turbineIndex
 	else
 		printLog("turbine["..turbineIndex.."] in handleTurbineMonitorClick(turbineIndex="..turbineIndex..",monitorIndex="..monitorIndex..") is a valid Big Turbine.")
-		if turbine.connected() then
+		if turbine.getConnected() then
 			printLog("turbine["..turbineIndex.."] in handleTurbineMonitorClick(turbineIndex="..turbineIndex..",monitorIndex="..monitorIndex..") is connected.")
 		else
 			printLog("turbine["..turbineIndex.."] in handleTurbineMonitorClick(turbineIndex="..turbineIndex..",monitorIndex="..monitorIndex..") is NOT connected.")
 			return -- Disconnected turbine
-		end -- if turbine.connected() then
+		end -- if turbine.getConnected() then
 	end
 
 	local turbineBaseSpeed = tonumber(_G[turbineNames[turbineIndex]]["TurbineOptions"]["BaseSpeed"])
@@ -1249,7 +1249,7 @@ local function findTurbines()
 
 
 				printLog("turbineList["..turbineIndex.."] in findTurbines() is a valid Big Reactors Turbine.")
-				if turbine.connected() then
+				if turbine.getConnected() then
 					printLog("turbine["..turbineIndex.."] in findTurbines() is connected.")
 				else
 					printLog("turbine["..turbineIndex.."] in findTurbines() is NOT connected.")
@@ -1850,7 +1850,7 @@ local function displayAllStatus(monitorIndex)
 			printLog("turbine["..turbineIndex.."] in displayAllStatus() is a valid Turbine.")
 		end -- if not turbine then
 
-		if turbine.connected() then
+		if turbine.getConnected() then
 			printLog("turbine["..turbineIndex.."] in displayAllStatus() is connected.")
 			if turbine.getActive() then
 				onlineTurbine = onlineTurbine + 1
@@ -1863,7 +1863,7 @@ local function displayAllStatus(monitorIndex)
 			totalCoolantStored = totalCoolantStored + turbine.getOutputAmount()
 		else
 			printLog("turbine["..turbineIndex.."] in displayAllStatus() is NOT connected.")
-		end -- if turbine.connected() then
+		end -- if turbine.getConnected() then
 	end -- for turbineIndex = 1, #turbineList do
 
 	print{"Reactors online/found: "..onlineReactor.."/"..#reactorList, 2, 3, monitorIndex}
@@ -1927,12 +1927,12 @@ local function displayTurbineBars(turbineIndex, monitorIndex)
 		return -- Invalid turbineIndex
 	else
 		printLog("turbine["..turbineIndex.."] in displayTurbineBars(turbineIndex="..turbineIndex..",monitorIndex="..monitorIndex..") is a valid Big Turbine.")
-		if turbine.connected() then
+		if turbine.getConnected() then
 			printLog("turbine["..turbineIndex.."] in displayTurbineBars(turbineIndex="..turbineIndex..",monitorIndex="..monitorIndex..") is connected.")
 		else
 			printLog("turbine["..turbineIndex.."] in displayTurbineBars(turbineIndex="..turbineIndex..",monitorIndex="..monitorIndex..") is NOT connected.")
 			return -- Disconnected turbine
-		end -- if turbine.connected() then
+		end -- if turbine.getConnected() then
 	end -- if not turbine then
 
 	--local variable to match the view on the monitor
@@ -2064,7 +2064,7 @@ local function turbineStatus(turbineIndex, monitorIndex)
 	local width, height = monitor.getSize()
 	local turbineStatus = ""
 
-	if turbine.connected() then
+	if turbine.getConnected() then
 		printLog("turbine["..turbineIndex.."] in turbineStatus(turbineIndex="..turbineIndex..",monitorIndex="..monitorIndex..") is connected.")
 		if turbine.getActive() then
 			turbineStatus = "ONLINE"
@@ -2078,7 +2078,7 @@ local function turbineStatus(turbineIndex, monitorIndex)
 		printLog("turbine["..turbineIndex.."] in turbineStatus(turbineIndex="..turbineIndex..",monitorIndex="..monitorIndex..") is NOT connected.")
 		turbineStatus = "DISCONNECTED"
 		monitor.setTextColor(colors.red)
-	end -- if turbine.connected() then
+	end -- if turbine.getConnected() then
 
 	print{turbineStatus, width - string.len(turbineStatus) - 1, 1, monitorIndex}
 	monitor.setTextColor(colors.white)
@@ -2106,11 +2106,11 @@ local function flowRateControl(turbineIndex)
 		else
 			printLog("turbine["..turbineIndex.."] in flowRateControl(turbineIndex="..turbineIndex..") is a valid Big Turbine.")
 
-			if turbine.connected() then
+			if turbine.getConnected() then
 				printLog("turbine["..turbineIndex.."] in flowRateControl(turbineIndex="..turbineIndex..") is connected.")
 			else
 				printLog("turbine["..turbineIndex.."] in flowRateControl(turbineIndex="..turbineIndex..") is NOT connected.")
-			end -- if turbine.connected() then
+			end -- if turbine.getConnected() then
 		end -- if not turbine then
 
 		-- No point modifying control rod levels for temperature if the turbine is offline
@@ -2409,7 +2409,7 @@ function main()
 				printLog("turbine["..turbineIndex.."] in main() is a valid Big Turbine.")
 			end -- if not turbine then
 
-			if turbine.connected() then
+			if turbine.getConnected() then
 				printLog("turbine["..turbineIndex.."] is connected.")
 
 				if ((not _G[turbineNames[turbineIndex]]["TurbineOptions"]["flowOverride"]) or (_G[turbineNames[turbineIndex]]["TurbineOptions"]["flowOverride"] == "false")) then
@@ -2422,7 +2422,7 @@ function main()
 				end
 			else
 				printLog("turbine["..turbineIndex.."] is NOT connected.")
-			end -- if turbine.connected() then
+			end -- if turbine.getConnected() then
 		end -- for reactorIndex = 1, #reactorList do
 
 		wait(loopTime) -- Sleep. No, wait...
