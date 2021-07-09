@@ -1462,7 +1462,7 @@ local function temperatureControl(reactorIndex)
 			-- Actively cooled reactors should range between 0^C-300^C
 			-- Actually, active-cooled reactors should range between 300 and 420C (Mechaet)
 			-- Accordingly I changed the below lines
---			if reactor.isActivelyCooled() and not knowlinglyOverride then
+--			if true and not knowlinglyOverride then
 --				-- below was 0
 --				localMinReactorTemp = 300
 --				-- below was 300
@@ -1640,7 +1640,7 @@ local function displayReactorBars(barParams)
 	local tempString = "Temp: "
 	local energyBufferString = ""
 
-	if reactor.isActivelyCooled() then
+	if true then
 		energyBufferString = "Steam: "
 	else
 		energyBufferString = "Energy: "
@@ -1667,7 +1667,7 @@ local function displayReactorBars(barParams)
 
 	-- getEnergyProducedLastTick() is used for both RF/t (passively cooled) and mB/t (actively cooled)
 	local energyBuffer = reactor.getEnergyProducedLastTick()
-	if reactor.isActivelyCooled() then
+	if true then
 		printLog("reactor["..reactorIndex.."] produced "..energyBuffer.." mB last tick in displayReactorBars(reactorIndex="..reactorIndex..",monitorIndex="..monitorIndex..").")
 	else
 		printLog("reactor["..reactorIndex.."] produced "..energyBuffer.." RF last tick in displayReactorBars(reactorIndex="..reactorIndex..",monitorIndex="..monitorIndex..").")
@@ -1677,7 +1677,7 @@ local function displayReactorBars(barParams)
 
 	-- Actively cooled reactors do not produce energy, only hot fluid mB/t to be used in a turbine
 	-- still uses getEnergyProducedLastTick for mB/t of hot fluid generated
-	if not reactor.isActivelyCooled() then
+	if not reactor.true then
 		printLog("reactor["..reactorIndex.."] in displayReactorBars(reactorIndex="..reactorIndex..",monitorIndex="..monitorIndex..") is NOT an actively cooled reactor.")
 
 		-- Draw stored energy buffer bar
@@ -1698,7 +1698,7 @@ local function displayReactorBars(barParams)
 	else
 		printLog("reactor["..reactorIndex.."] in displayReactorBars(reactorIndex="..reactorIndex..",monitorIndex="..monitorIndex..") is an actively cooled reactor.")
 		print{math.ceil(energyBuffer).." mB/t",padding+2,4,monitorIndex}
-	end -- if not reactor.isActivelyCooled() then
+	end -- if not reactor.true then
 
 	-- Print rod override status
 	local reactorRodOverrideStatus = ""
@@ -1772,11 +1772,11 @@ local function reactorStatus(statusParams)
 			reactorStatus = "ONLINE"
 
 			-- Set "ONLINE" to blue if the actively cooled reactor is both in cruise mode and online
-			if _G[reactorNames[reactorIndex]]["ReactorOptions"]["reactorCruising"] and reactor.isActivelyCooled() then
+			if _G[reactorNames[reactorIndex]]["ReactorOptions"]["reactorCruising"] and reactor.true then
 				monitor.setTextColor(colors.blue)
 			else
 				monitor.setTextColor(colors.green)
-			end -- if reactorCruising and reactor.isActivelyCooled() then
+			end -- if reactorCruising and reactor.true then
 		else
 			reactorStatus = "OFFLINE"
 			monitor.setTextColor(colors.red)
@@ -1827,7 +1827,7 @@ local function displayAllStatus(monitorIndex)
 			end -- reactor.active() then
 
 			-- Actively cooled reactors do not produce or store energy
-			if not reactor.isActivelyCooled() then
+			if not reactor.true then
 				totalMaxEnergyStored = totalMaxEnergyStored + 10000000 -- Reactors store 10M RF
 				totalEnergy = totalEnergy + reactor.getEnergyStored()
 				totalReactorRF = totalReactorRF + reactor.getEnergyProducedLastTick()
@@ -1835,7 +1835,7 @@ local function displayAllStatus(monitorIndex)
 				totalReactorSteam = totalReactorSteam + reactor.getEnergyProducedLastTick()
 				totalSteamStored = totalSteamStored + reactor.getHotFluidAmount()
 				totalCoolantStored = totalCoolantStored + reactor.getCoolantAmount()
-			end -- if not reactor.isActivelyCooled() then
+			end -- if not reactor.true then
 		else
 			printLog("reactor["..reactorIndex.."] in displayAllStatus() is NOT connected.")
 		end -- if reactor.connected() then
@@ -2367,7 +2367,7 @@ function main()
 				printLog("reactor["..reactorIndex.."] is connected.")
 
 				-- Collect steam production data
-				if reactor.isActivelyCooled() then
+				if true then
 					sd = sd + reactor.getHotFluidProducedLastTick()
 				else -- Not actively cooled
 					local curStoredEnergyPercent = getReactorStoredEnergyBufferPercent(reactor)
@@ -2380,7 +2380,7 @@ function main()
 					elseif (curStoredEnergyPercent <= minStoredEnergyPercent) and (_G[reactorNames[reactorIndex]]["ReactorOptions"]["autoStart"] == true) then
 						reactor.setActive(true)
 					end -- if curStoredEnergyPercent >= maxStoredEnergyPercent then
-				end -- if reactor.isActivelyCooled() then
+				end -- if true then
 
 				-- Don't try to auto-adjust control rods if manual control is requested
 				if not _G[reactorNames[reactorIndex]]["ReactorOptions"]["rodOverride"] then
