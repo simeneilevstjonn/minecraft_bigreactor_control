@@ -1079,7 +1079,7 @@ local function findReactors()
 	-- Empty out old list of reactors
 	local newReactorList = {}
 	printLog("Finding reactors...")
-	newReactorList, reactorNames = getDevices("BigReactors-Reactor")
+	newReactorList, reactorNames = getDevices("BiggerReactors-Reactor")
 
 	if #newReactorList == 0 then
 		printLog("No reactors found!")
@@ -1210,7 +1210,7 @@ local function findTurbines()
 	local newTurbineList = {}
 
 	printLog("Finding turbines...")
-	newTurbineList, turbineNames = getDevices("BigReactors-Turbine")
+	newTurbineList, turbineNames = getDevices("BiggerReactors-Turbine")
 
 	if #newTurbineList == 0 then
 		printLog("No turbines found") -- Not an error
