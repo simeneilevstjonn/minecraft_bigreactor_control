@@ -815,13 +815,13 @@ UI.handleReactorMonitorClick = function(self, reactorIndex, monitorIndex)
 	local width, height = monitor.getSize()
 	if xClick >= (width - string.len(reactorStatus) - 1) and xClick <= (width-1) and (sideClick == monitorNames[monitorIndex]) then
 		if yClick == 1 then
-			reactor.setActive(not reactor.getActive()) -- Toggle reactor status
-			_G[reactorNames[reactorIndex]]["ReactorOptions"]["autoStart"] = reactor.getActive()
+			reactor.setActive(not reactor.active()) -- Toggle reactor status
+			_G[reactorNames[reactorIndex]]["ReactorOptions"]["autoStart"] = reactor.active()
 			config.save(reactorNames[reactorIndex]..".options", _G[reactorNames[reactorIndex]])
 			sideClick, xClick, yClick = 0, 0, 0 -- Reset click after we register it
 
 			-- If someone offlines the reactor (offline after a status click was detected), then disable autoStart
-			if not reactor.getActive() then
+			if not reactor.active() then
 				_G[reactorNames[reactorIndex]]["ReactorOptions"]["autoStart"] = false
 			end
 		end -- if yClick == 1 then
@@ -1458,7 +1458,7 @@ local function temperatureControl(reactorIndex)
 	--bypass if the reactor itself is set to not be auto-controlled
 	if ((not _G[reactorNames[reactorIndex]]["ReactorOptions"]["rodOverride"]) or (_G[reactorNames[reactorIndex]]["ReactorOptions"]["rodOverride"] == "false")) then
 		-- No point modifying control rod levels for temperature if the reactor is offline
-		if reactor.getActive() then
+		if reactor.active() then
 			-- Actively cooled reactors should range between 0^C-300^C
 			-- Actually, active-cooled reactors should range between 300 and 420C (Mechaet)
 			-- Accordingly I changed the below lines
@@ -1537,7 +1537,7 @@ local function temperatureControl(reactorIndex)
 			_G[reactorNames[reactorIndex]]["ReactorOptions"]["lastSteamPoll"] = reactor.getHotFluidProducedLastTick()
 
 			config.save(reactorNames[reactorIndex]..".options", _G[reactorNames[reactorIndex]])
-		end -- if reactor.getActive() then
+		end -- if reactor.active() then
 	else
 		printLog("Bypassed temperature control due to rodOverride being "..tostring(_G[reactorNames[reactorIndex]]["ReactorOptions"]["rodOverride"]).." EOL")
 	end -- if not _G[reactorNames[reactorIndex]]["ReactorOptions"]["rodOverride"] then
@@ -1768,7 +1768,7 @@ local function reactorStatus(statusParams)
 	if reactor.connected() then
 		printLog("reactor["..reactorIndex.."] in reactorStatus(reactorIndex="..reactorIndex..",monitorIndex="..monitorIndex..") is connected.")
 
-		if reactor.getActive() then
+		if reactor.active() then
 			reactorStatus = "ONLINE"
 
 			-- Set "ONLINE" to blue if the actively cooled reactor is both in cruise mode and online
@@ -1780,7 +1780,7 @@ local function reactorStatus(statusParams)
 		else
 			reactorStatus = "OFFLINE"
 			monitor.setTextColor(colors.red)
-		end -- if reactor.getActive() then
+		end -- if reactor.active() then
 
 	else
 		printLog("reactor["..reactorIndex.."] in reactorStatus(reactorIndex="..reactorIndex..",monitorIndex="..monitorIndex..") is NOT connected.")
@@ -1821,10 +1821,10 @@ local function displayAllStatus(monitorIndex)
 
 		if reactor.connected() then
 			printLog("reactor["..reactorIndex.."] in displayAllStatus() is connected.")
-			if reactor.getActive() then
+			if reactor.active() then
 				onlineReactor = onlineReactor + 1
 				totalReactorFuelConsumed = totalReactorFuelConsumed + reactor.getFuelConsumedLastTick()
-			end -- reactor.getActive() then
+			end -- reactor.active() then
 
 			-- Actively cooled reactors do not produce or store energy
 			if not reactor.isActivelyCooled() then
